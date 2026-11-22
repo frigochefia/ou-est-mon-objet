@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102b2b">
+<title>Où est mon objet ?</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{--bg:#f4f7f6;--ink:#142f30;--muted:#718381;--teal:#087f78;--teal2:#0caaa0;--mint:#e1f4ee;--line:#e5eeeb;--white:#fff;--orange:#f3a45b;--shadow:0 10px 28px #183b3210}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}
+.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:98px}
+.hero{padding:24px 20px 28px;color:white;background:radial-gradient(circle at 90% 5%,#24b6a8 0,transparent 31%),linear-gradient(140deg,#102b2b,#075e59 75%);border-radius:0 0 30px 30px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:190px;height:190px;border:1px solid #ffffff18;border-radius:50%;right:-70px;bottom:-110px;box-shadow:0 0 0 22px #ffffff08,0 0 0 48px #ffffff06}
+.topbar{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:-.4px;font-size:17px}
+.logo{width:37px;height:37px;border-radius:13px;background:#ffffff20;display:grid;place-items:center;font-size:20px}
+.top-actions{display:flex;gap:8px}.iconbtn{width:38px;height:38px;border-radius:13px;background:#ffffff18;color:white;font-size:17px}
+.hero-copy{position:relative;z-index:1;margin-top:28px}.eyebrow{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#a9e8db;font-weight:800}
+.hero h1{font-size:29px;letter-spacing:-1.1px;line-height:1.12;margin:8px 0}.hero p{font-size:13px;color:#d0e8e2;margin:0;max-width:300px}
+.search-wrap{position:relative;z-index:3;margin:21px 16px 0;display:flex;align-items:center;background:white;border:1px solid var(--line);border-radius:17px;padding:0 12px;box-shadow:0 8px 25px #153b3010}
+.search-wrap .glass{font-size:18px;color:#7c918c}.search-wrap input{width:100%;border:0;outline:0;padding:15px 10px;background:transparent;color:var(--ink);min-width:0}.search-wrap button{background:var(--mint);color:var(--teal);width:35px;height:35px;border-radius:11px;font-size:17px}
+.content{padding:0 16px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.stat{background:white;border:1px solid var(--line);border-radius:17px;padding:13px 12px;box-shadow:var(--shadow)}
+.stat .sicon{font-size:17px}.stat strong{display:block;font-size:22px;letter-spacing:-.8px;margin-top:7px}.stat span{font-size:11px;color:var(--muted)}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:25px 2px 12px}.section-head h2{font-size:17px;letter-spacing:-.3px;margin:0}.section-head button{background:transparent;color:var(--teal);font-weight:750;font-size:12px;padding:5px}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.quick button{background:white;border:1px solid var(--line);border-radius:16px;padding:13px 4px 11px;color:var(--ink);box-shadow:var(--shadow);display:flex;align-items:center;flex-direction:column;gap:7px}
+.quick .qicon{width:37px;height:37px;border-radius:13px;background:var(--mint);display:grid;place-items:center;font-size:19px}.quick span:last-child{font-size:10px;font-weight:700}
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.cat{border:1px solid var(--line);border-radius:17px;padding:13px;background:white;display:flex;align-items:center;gap:11px;text-align:left;box-shadow:var(--shadow);color:var(--ink)}
+.cat .cat-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:21px;background:#edf5f2;flex-shrink:0}
+.cat b{font-size:12px;display:block}.cat small{color:var(--muted);font-size:10px}
+.cat.active{border-color:#54b8a8;box-shadow:0 0 0 2px #087f7818}
+.item-list{display:grid;gap:10px}
+.item{display:flex;align-items:center;gap:12px;background:white;border:1px solid var(--line);border-radius:17px;padding:10px;box-shadow:var(--shadow);min-width:0}
+.thumb{width:58px;height:58px;flex-shrink:0;border-radius:14px;background:#e8f4ef;display:grid;place-items:center;font-size:25px;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.item-info{min-width:0;flex:1}.item-info b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item-info p{margin:4px 0 0;color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-info small{color:#9aa9a5;font-size:10px}.item-actions{display:flex;gap:5px}.mini{width:32px;height:32px;border-radius:11px;background:#f2f6f4;color:#58716b;font-size:15px}.mini.fav{color:#e18a53;background:#fff2e7}
+.empty{background:white;border:1px dashed #c6d9d2;border-radius:18px;padding:25px 18px;text-align:center;color:var(--muted)}.empty .big{font-size:35px}.empty b{display:block;color:var(--ink);margin:7px}
+.ad-slot{margin:20px 0 0;border:1px dashed #c8d6d1;border-radius:14px;min-height:48px;display:flex;justify-content:center;align-items:center;text-align:center;padding:7px;color:#899a95;font-size:10px;background:#eef3f1}.ad-slot strong{font-size:9px;letter-spacing:1px;display:block;color:#6f8580}
+.premium{margin-top:18px;padding:15px;border-radius:19px;background:linear-gradient(110deg,#fff4d9,#fffaf0);border:1px solid #f1dfb6;display:flex;align-items:center;gap:12px}
+.premium .star{width:42px;height:42px;border-radius:14px;background:#ffebbd;display:grid;place-items:center;font-size:21px}.premium div:nth-child(2){flex:1}.premium b{font-size:13px;color:#73500d}.premium p{font-size:10px;color:#8b7954;margin:3px 0 0}.premium button{background:#173d38;color:white;border-radius:11px;padding:9px 11px;font-size:11px;font-weight:750}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,760px);background:#ffffffed;backdrop-filter:blur(15px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:5}
+.bottom button{background:transparent;color:#91a19c;display:flex;align-items:center;flex-direction:column;gap:3px;font-size:10px;font-weight:700;min-width:60px}.bottom button span:first-child{font-size:19px}.bottom button.active{color:var(--teal)}
+.fab{position:fixed;z-index:6;bottom:82px;right:max(18px,calc((100vw - 720px)/2));width:56px;height:56px;border-radius:19px;background:linear-gradient(135deg,var(--teal2),var(--teal));color:white;font-size:27px;box-shadow:0 9px 25px #087f7850}
+dialog{border:0;border-radius:24px;padding:0;width:min(92%,480px);box-shadow:0 24px 80px #001b1b55}dialog::backdrop{background:#071c1bcc;backdrop-filter:blur(4px)}.modal{padding:21px}.modal h2{margin:0 0 5px;font-size:20px}.modal .sub{color:var(--muted);font-size:12px;margin:0 0 16px}.field{margin:12px 0}.field label{display:block;font-size:12px;font-weight:800;margin:0 0 6px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:13px;padding:12px;background:#fbfdfc;color:var(--ink);outline:0}.actions{display:flex;gap:9px;margin-top:17px}.actions button{flex:1;border-radius:13px;padding:13px;font-weight:800}.primary{background:var(--teal);color:white}.secondary{background:var(--mint);color:var(--teal)}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:9;background:#163b36;color:white;padding:11px 16px;border-radius:30px;font-size:12px;display:none;max-width:90%;text-align:center}
+@media(min-width:600px){.content{padding:0 22px}.search-wrap{margin-left:22px;margin-right:22px}.cat-grid{grid-template-columns:repeat(4,1fr)}.hero{padding-left:26px}.stats{gap:13px}}
+</style></head>
+<body>
+<div class="app">
+<header class="hero">
+ <div class="topbar"><div class="brand"><div class="logo">⌕</div> OÙ EST MON OBJET ?</div><div class="top-actions"><button class="iconbtn" id="backup" title="Exporter mes données">⇩</button><button class="iconbtn" id="settings" title="Paramètres">⚙</button></div></div>
+ <div class="hero-copy"><div class="eyebrow">TON ORGANISATEUR PERSONNEL</div><h1>Chaque chose<br>à sa place.</h1><p>Enregistre tes affaires une fois. Retrouve-les quand tu en as besoin.</p></div>
+</header>
+<div class="search-wrap"><span class="glass">⌕</span><input id="search" placeholder="Tu cherches quoi aujourd'hui ?" aria-label="Rechercher un objet"><button id="voice" title="Recherche vocale">🎙</button></div>
+<main class="content">
+ <section class="stats">
+  <div class="stat"><span class="sicon">📦</span><strong id="total">0</strong><span>Objets rangés</span></div>
+  <div class="stat"><span class="sicon">⭐</span><strong id="favorites">0</strong><span>Favoris</span></div>
+  <div class="stat"><span class="sicon">🏠</span><strong id="places">0</strong><span>Endroits</span></div>
+ </section>
+ <div class="section-head"><h2>Accès rapide</h2></div>
+ <div class="quick">
+  <button id="quickAdd"><span class="qicon">＋</span><span>Ajouter</span></button>
+  <button id="quickFav"><span class="qicon">☆</span><span>Favoris</span></button>
+  <button id="quickRecent"><span class="qicon">🕘</span><span>Récents</span></button>
+  <button id="quickBackup"><span class="qicon">☁</span><span>Sauvegarde</span></button>
+ </div>
+ <div class="section-head"><h2>Catégories</h2><button id="allCats">Tout voir</button></div>
+ <div class="cat-grid" id="categories">
+  <button class="cat" data-cat="Maison"><span class="cat-icon">🏠</span><span><b>Maison</b><small id="n-Maison">0 objet</small></span></button>
+  <button class="cat" data-cat="Clés & papiers"><span class="cat-icon">🔑</span><span><b>Clés & papiers</b><small id="n-Clés & papiers">0 objet</small></span></button>
+  <button class="cat" data-cat="Électronique"><span class="cat-icon">🎧</span><span><b>Électronique</b><small id="n-Électronique">0 objet</small></span></button>
+  <button class="cat" data-cat="Outils"><span class="cat-icon">🧰</span><span><b>Outils</b><small id="n-Outils">0 objet</small></span></button>
+ </div>
+ <div class="section-head"><h2 id="listTitle">Derniers objets ajoutés</h2><button id="clearFilter">Voir tout</button></div>
+ <div class="item-list" id="items"></div>
+ <div class="premium" id="premiumCard"><div class="star">✦</div><div><b>Passe en Premium</b><p>Profite de l'application sans aucune publicité.</p></div><button id="premiumBtn">Découvrir</button></div>
+ <div class="ad-slot" id="adSlot"><div><strong>ESPACE PUBLICITAIRE</strong>Emplacement discret · AdMob à connecter avant publication</div></div>
+ <p style="font-size:10px;color:#91a19c;text-align:center;margin:16px 0 4px">Tes données restent sur cet appareil dans cette version de démonstration.</p>
+</main>
+</div>
+<button class="fab" id="fab" aria-label="Ajouter un objet">＋</button>
+<nav class="bottom">
+ <button class="active" data-tab="home"><span>⌂</span><span>Accueil</span></button>
+ <button data-tab="objects"><span>▦</span><span>Mes objets</span></button>
+ <button data-tab="favorites"><span>☆</span><span>Favoris</span></button>
+ <button data-tab="premium"><span>✦</span><span>Premium</span></button>
+</nav>
+<dialog id="modal"><form class="modal" id="form"><h2>Ajouter un objet</h2><p class="sub">Enregistre son emplacement pour le retrouver facilement.</p>
+<div class="field"><label for="name">Nom de l'objet *</label><input id="name" required maxlength="60" placeholder="Ex. : Clés de la voiture"></div>
+<div class="field"><label for="place">Où l'as-tu rangé ? *</label><input id="place" required maxlength="100" placeholder="Ex. : Entrée, vide-poche"></div>
+<div class="field"><label for="category">Catégorie</label><select id="category"><option>Maison</option><option>Clés & papiers</option><option>Électronique</option><option>Outils</option><option>Vêtements</option><option>Autre</option></select></div>
+<div class="field"><label for="note">Détail ou petite note</label><textarea id="note" rows="2" maxlength="180" placeholder="Dans la boîte bleue, sous les papiers…"></textarea></div>
+<div class="field"><label for="photo">Ajouter une photo (facultatif)</label><input id="photo" type="file" accept="image/*" capture="environment"></div>
+<div class="actions"><button type="button" class="secondary" id="cancel">Annuler</button><button type="submit" class="primary">Enregistrer</button></div></form></dialog>
+<dialog id="premiumModal"><div class="modal"><h2>✦ OÙ EST MON OBJET ? Premium</h2><p class="sub">Une expérience plus confortable, sans publicité.</p><ul style="font-size:13px;line-height:1.8;padding-left:19px"><li>Aucune publicité</li><li>Fonctions avancées à venir</li><li>Organisation encore plus simple</li></ul><p class="sub">Le paiement réel n'est pas encore activé dans ce prototype.</p><div class="actions"><button class="secondary" id="closePremium">Fermer</button><button class="primary" id="demoPremium">Tester sans publicité</button></div></div></dialog>
+<dialog id="settingsModal"><div class="modal"><h2>Paramètres</h2><p class="sub">Gère tes données sur cet appareil.</p><button class="secondary" style="width:100%;margin:5px 0" id="exportBtn">⇩ Exporter une sauvegarde</button><button class="secondary" style="width:100%;margin:5px 0" id="importBtn">⇧ Importer une sauvegarde</button><input type="file" id="importFile" accept="application/json" hidden><p class="sub" style="margin-top:13px">La version actuelle stocke les données dans le navigateur. Pense à exporter une sauvegarde avant de changer de téléphone.</p><div class="actions"><button class="primary" id="closeSettings">Fermer</button></div></div></dialog>
+<div class="toast" id="toast"></div>
+<script>
+const KEY='ou_est_mon_objet_items_v4';let items=JSON.parse(localStorage.getItem(KEY)||'[]');let premium=localStorage.getItem('ou_est_mon_objet_premium')==='yes';let filterCat='',favOnly=false,recentOnly=false;
+const $=id=>document.getElementById(id);const catIcons={'Maison':'🏠','Clés & papiers':'🔑','Électronique':'🎧','Outils':'🧰','Vêtements':'👕','Autre':'📦'};
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(items));render()}catch(e){alert('Espace de stockage insuffisant. Essaie une photo plus légère ou exporte tes données.');}}
+function toast(s){$('toast').textContent=s;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2400)}
+function exportData(){const blob=new Blob([JSON.stringify({app:'ou-est-mon-objet',version:4,items},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mes-objets-sauvegarde.json';a.click();URL.revokeObjectURL(a.href);toast('Sauvegarde préparée.');}
+function render(){
+ const q=$('search').value.trim().toLocaleLowerCase('fr');let shown=[...items].filter(x=>(x.name+' '+x.place+' '+(x.note||'')).toLocaleLowerCase('fr').includes(q));
+ if(filterCat)shown=shown.filter(x=>x.category===filterCat);if(favOnly)shown=shown.filter(x=>x.favorite);if(recentOnly)shown=shown.slice(0,5);
+ $('total').textContent=items.length;$('favorites').textContent=items.filter(x=>x.favorite).length;$('places').textContent=new Set(items.map(x=>x.place.toLocaleLowerCase('fr'))).size;
+ ['Maison','Clés & papiers','Électronique','Outils'].forEach(c=>{const el=$('n-'+c);if(el)el.textContent=items.filter(x=>x.category===c).length+' objet(s)';});
+ document.querySelectorAll('.cat').forEach(b=>b.classList.toggle('active',b.dataset.cat===filterCat));
+ $('listTitle').textContent=favOnly?'Mes favoris':recentOnly?'Ajouts récents':filterCat||'Derniers objets ajoutés';
+ $('items').innerHTML=shown.length?shown.map(x=>`<article class="item"><div class="thumb">${x.photo?`<img src="${x.photo}" alt="">`:catIcons[x.category]||'📦'}</div><div class="item-info"><b>${esc(x.name)}</b><p>📍 ${esc(x.place)}</p><small>${esc(x.category||'Autre')} · ${new Date(x.date).toLocaleDateString('fr-FR')}</small></div><div class="item-actions"><button class="mini ${x.favorite?'fav':''}" onclick="toggleFav('${x.id}')" aria-label="Favori">${x.favorite?'★':'☆'}</button><button class="mini" onclick="deleteItem('${x.id}')" aria-label="Supprimer">⋯</button></div></article>`).join(''):`<div class="empty"><div class="big">${q?'🔎':'🧭'}</div><b>${q?'Aucun objet trouvé':'Aucun objet pour le moment'}</b><span style="font-size:12px">${q?'Essaie un autre mot ou retire un filtre.':'Ajoute ton premier objet avec le bouton +.'}</span></div>`;
+ $('adSlot').style.display=premium?'none':'flex';$('premiumCard').style.display=premium?'none':'flex';
+}
+function toggleFav(id){const x=items.find(x=>x.id===id);if(x){x.favorite=!x.favorite;persist();toast(x.favorite?'Ajouté aux favoris':'Retiré des favoris');}}
+function deleteItem(id){if(confirm('Supprimer cet objet ?')){items=items.filter(x=>x.id!==id);persist();toast('Objet supprimé');}}
+function openAdd(){$('modal').showModal();}
+$('fab').onclick=openAdd;$('quickAdd').onclick=openAdd;$('cancel').onclick=()=>$('modal').close();
+$('search').oninput=()=>{filterCat='';favOnly=false;recentOnly=false;render()};
+$('form').onsubmit=async e=>{e.preventDefault();const f=$('photo').files[0];let photo='';if(f){if(f.size>1.8*1024*1024){alert('Photo trop lourde : choisis une image de moins de 1,8 Mo.');return;}photo=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f);});}
+items.unshift({id:Date.now().toString(),name:$('name').value.trim(),place:$('place').value.trim(),category:$('category').value,note:$('note').value.trim(),photo,date:new Date().toISOString(),favorite:false});persist();$('form').reset();$('modal').close();filterCat='';favOnly=false;recentOnly=false;toast('Objet enregistré !');};
+document.querySelectorAll('.cat').forEach(b=>b.onclick=()=>{filterCat=filterCat===b.dataset.cat?'':b.dataset.cat;favOnly=false;recentOnly=false;render();});
+$('allCats').onclick=()=>{filterCat='';render()};$('clearFilter').onclick=()=>{filterCat='';favOnly=false;recentOnly=false;$('search').value='';render()};
+$('quickFav').onclick=()=>{favOnly=!favOnly;recentOnly=false;filterCat='';render()};
+$('quickRecent').onclick=()=>{recentOnly=!recentOnly;favOnly=false;filterCat='';render()};
+$('quickBackup').onclick=exportData;$('backup').onclick=exportData;$('exportBtn').onclick=exportData;
+$('settings').onclick=()=>$('settingsModal').showModal();$('closeSettings').onclick=()=>$('settingsModal').close();
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.items))throw Error();if(confirm('Importer cette sauvegarde ? Les objets actuels seront remplacés.')){items=d.items;persist();toast('Sauvegarde importée.');}}catch(_){alert('Fichier de sauvegarde non reconnu.')}e.target.value='';};
+$('premiumBtn').onclick=()=>$('premiumModal').showModal();$('closePremium').onclick=()=>$('premiumModal').close();
+$('demoPremium').onclick=()=>{premium=true;localStorage.setItem('ou_est_mon_objet_premium','yes');$('premiumModal').close();render();toast('Mode démo sans publicité activé.');};
+$('voice').onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast('La recherche vocale n’est pas disponible dans ce navigateur.');return;}const r=new SR();r.lang='fr-FR';r.onresult=e=>{$('search').value=e.results[0][0].transcript;filterCat='';favOnly=false;recentOnly=false;render();};r.onerror=()=>toast('Je n’ai pas compris. Réessaie.');r.start();};
+$('quickFav').title='Afficher les favoris';document.querySelectorAll('.bottom button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.bottom button').forEach(x=>x.classList.remove('active'));b.classList.add('active');const t=b.dataset.tab;if(t==='favorites'){favOnly=true;filterCat='';recentOnly=false;render();}else if(t==='objects'){favOnly=false;filterCat='';recentOnly=false;$('search').value='';render();}else if(t==='premium')$('premiumModal').showModal();else{favOnly=false;filterCat='';recentOnly=false;$('search').value='';render();window.scrollTo({top:0,behavior:'smooth'});}});
+render();
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script></body></html>

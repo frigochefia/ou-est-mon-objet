@@ -1,0 +1,23 @@
+OÙ EST MON OBJET ? — prototype 4.0
+
+Cette version améliore fortement l'interface mobile :
+- Tableau de bord et statistiques
+- Catégories et filtres
+- Favoris et ajouts récents
+- Ajout avec photo, emplacement, catégorie et note
+- Recherche texte et recherche vocale si le navigateur la prend en charge
+- Export/import de sauvegarde JSON
+- Espace publicitaire discret réservé
+- Écran Premium et mode démo sans publicité
+
+Tester :
+1. Extraire le ZIP.
+2. Ouvrir index.html dans Chrome.
+3. Pour installer en PWA, héberger le dossier sur HTTPS puis menu Chrome > Installer l'application.
+
+Attention avant Google Play :
+- Ce prototype web n'est pas encore un APK/AAB Android.
+- La zone publicitaire n'est pas connectée à AdMob et ne génère aucun revenu.
+- Le mode Premium est une démonstration locale et n'effectue aucun paiement.
+- Il faudra créer le projet Android, intégrer Google Mobile Ads et Google Play Billing, gérer le consentement publicitaire et la confidentialité, tester puis préparer la fiche Play Store.
+- Les données sont locales à ce navigateur/appareil. Exporter régulièrement une sauvegarde.
