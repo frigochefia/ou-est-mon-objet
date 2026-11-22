@@ -5,5 +5,9 @@
   "display": "standalone",
   "background_color": "#f4f7f6",
   "theme_color": "#102b2b",
-  "description": "Ton organisateur personnel pour retrouver facilement les objets rangés."
+  "description": "Ton organisateur personnel pour retrouver facilement les objets rangés.",
+  "categories": [
+    "productivity",
+    "reference"
+  ]
 }
